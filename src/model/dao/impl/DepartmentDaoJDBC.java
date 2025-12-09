@@ -8,7 +8,6 @@ import model.entites.Department;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DepartmentDaoJDBC implements DepartmentDao {
 
@@ -74,7 +73,25 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     }
 
     @Override
-    public void deleteById(Department id) {
+    public void deleteById(Integer id) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement("DELETE FROM department \n" +
+                    "WHERE Id = ?\n");
+
+            st.setInt(1,id);
+
+            int rows = st.executeUpdate();
+
+            if (rows == 0){
+                throw new DbException("This ID does not exist");
+            }
+
+        }catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+        }
 
     }
 
@@ -85,7 +102,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
         try {
             st = conn.prepareStatement("SELECT *\n"
                     + "FROM department\n"
-                    + "WHERE Id = ?;\n");
+                    + "WHERE Id = ?\n");
 
             st.setInt(1, id);
             rs = st.executeQuery();
@@ -110,13 +127,13 @@ public class DepartmentDaoJDBC implements DepartmentDao {
         ResultSet rs = null;
 
         try {
-            st = conn.prepareStatement("SELECT * FROM department ORDER BY Name");
+            st = conn.prepareStatement("SELECT * FROM department ORDER BY Name");// Se quiser ordenar por Id, é só trocar "Name" por "Id"
 
             rs = st.executeQuery();
 
             List<Department> list = new ArrayList<>();
 
-            while (rs.next()){
+            while (rs.next()) {
                 Department dep = new Department();
                 dep.setId(rs.getInt("Id"));
                 dep.setName(rs.getString("Name"));
@@ -124,9 +141,9 @@ public class DepartmentDaoJDBC implements DepartmentDao {
             }
             return list;
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        }finally {
+        } finally {
             DB.closeStatement(st);
             DB.closeResultSet(rs);
         }
