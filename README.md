@@ -71,6 +71,10 @@ CREATE DATABASE coursejdbc;
 USE coursejdbc;
 ```
 
+**Arquivo database.sql (Criação e População das Tabelas)**
+
+**O arquivo database.sql, incluído no repositório, contém toda a estrutura necessária para que o projeto funcione corretamente.**
+
 E configurado o arquivo de conexão no projeto:
 
 ```
