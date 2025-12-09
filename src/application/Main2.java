@@ -17,12 +17,15 @@ public class Main2 {
 
 
         System.out.println("\n=== TEST 2: department findById ====");
-
         Department department = departmentDao.findById(1);
-
         System.out.println(department);
 
 
+        System.out.println("\n=== TEST 3: department update ====");
+        department = departmentDao.findById(7);
+        department.setName("Chipset");
+        departmentDao.update(department);
+        System.out.println("Update Completed");
 
 
     }
